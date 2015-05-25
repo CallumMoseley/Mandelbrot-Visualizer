@@ -1,11 +1,13 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -30,7 +32,28 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 		xCentre = -0.75;
 		yCentre = 0;
 		
-		maxIter = 200;
+		maxIter = 150;
+	}
+	
+	public int[] mapColour(double i, double x, double y)
+	{
+//		if (i < maxIter)
+//		{
+//			double zn = Math.sqrt(x * x + y * y);
+//			double nu = Math.log(Math.log(zn) / Math.log(2)) / Math.log(2);
+//			i = i + 1 - nu;
+//		}
+//		
+//		int colour1 = (int) ((-Math.cos(2*Math.PI * (int) (i) / (2 * maxIter)) + 1) / 2 * 255);
+//		int colour2 = (int) ((-Math.cos(2*Math.PI * (int) (i + 1) / (2 * maxIter)) + 1) / 2 * 255);
+//		
+//		int colour = (int) (Math.min(colour1, colour2) + Math.abs(colour1 - colour2) * (i % 1));
+		
+//		int colour = (int) ((-Math.cos(2*Math.PI * (int) (i) / (2 * maxIter)) + 1) / 2 * 255);
+		
+		int colour = (int) (Math.log(i) / Math.log(maxIter) * 255);
+		
+		return new int[] {colour, colour, colour};
 	}
 	
 	@Override
@@ -51,13 +74,19 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 				while (x * x + y * y < 4 && iter < maxIter)
 				{
 					double xTemp = x * x - y * y + x0;
-					y = 2 * x * y + y0;
+					double yTemp = 2 * x * y + y0;
+					if (x == xTemp && y == yTemp)
+					{
+						iter = maxIter;
+						break;
+					}
 					x = xTemp;
+					y = yTemp;
 					iter++;
 				}
 				
-				int colour = (int) ((double) iter / maxIter * 255);
-				g.setColor(new Color(colour, colour, colour, 255));
+				int[] colour = mapColour(iter, x, y);
+				g.setColor(new Color(colour[0], colour[1], colour[2], 255));
 				g.drawRect(x1, y1, 1, 1);
 			}
 		}
@@ -96,6 +125,13 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT)
 		{
 			xCentre += xRange / 10;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_SPACE)
+		{
+			xRange = 3.5;
+			xCentre = -0.75;
+			yRange = 2;
+			yCentre = 1;
 		}
 		
 		repaint();
