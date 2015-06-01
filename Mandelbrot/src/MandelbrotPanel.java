@@ -1,13 +1,11 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -35,25 +33,13 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 		maxIter = 150;
 	}
 	
-	public int[] mapColour(double i, double x, double y)
+	public double[] mapColour(double i, double x, double y)
 	{
-//		if (i < maxIter)
-//		{
-//			double zn = Math.sqrt(x * x + y * y);
-//			double nu = Math.log(Math.log(zn) / Math.log(2)) / Math.log(2);
-//			i = i + 1 - nu;
-//		}
-//		
-//		int colour1 = (int) ((-Math.cos(2*Math.PI * (int) (i) / (2 * maxIter)) + 1) / 2 * 255);
-//		int colour2 = (int) ((-Math.cos(2*Math.PI * (int) (i + 1) / (2 * maxIter)) + 1) / 2 * 255);
-//		
-//		int colour = (int) (Math.min(colour1, colour2) + Math.abs(colour1 - colour2) * (i % 1));
+		double r = i / maxIter;
+		double g = i / maxIter;
+		double b = i / maxIter;
 		
-//		int colour = (int) ((-Math.cos(2*Math.PI * (int) (i) / (2 * maxIter)) + 1) / 2 * 255);
-		
-		int colour = (int) (Math.log(i) / Math.log(maxIter) * 255);
-		
-		return new int[] {colour, colour, colour};
+		return new double[] {r, g, b};
 	}
 	
 	@Override
@@ -85,8 +71,8 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 					iter++;
 				}
 				
-				int[] colour = mapColour(iter, x, y);
-				g.setColor(new Color(colour[0], colour[1], colour[2], 255));
+				double[] colour = mapColour(iter, x, y);
+				g.setColor(Color.getHSBColor((float) colour[0], 1, 1 - (float) colour[0]));
 				g.drawRect(x1, y1, 1, 1);
 			}
 		}
@@ -131,7 +117,7 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 			xRange = 3.5;
 			xCentre = -0.75;
 			yRange = 2;
-			yCentre = 1;
+			yCentre = 0;
 		}
 		
 		repaint();
