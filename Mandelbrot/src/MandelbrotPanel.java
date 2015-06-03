@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener
 {
+	private static final double SCALE_FACTOR = 0.9;
 	private int maxIter;
 	
 	private double xRange, yRange;
@@ -88,13 +89,13 @@ public class MandelbrotPanel extends JPanel implements MouseListener, MouseMotio
 	{
 		if (e.getKeyCode() == KeyEvent.VK_Z)
 		{
-			xRange *= 0.75;
-			yRange *= 0.75;
+			xRange *= SCALE_FACTOR;
+			yRange *= SCALE_FACTOR;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_X)
 		{
-			xRange /= 0.75;
-			yRange /= 0.75;
+			xRange /= SCALE_FACTOR;
+			yRange /= SCALE_FACTOR;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_UP)
 		{
